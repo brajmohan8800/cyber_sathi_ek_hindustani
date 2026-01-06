@@ -10,11 +10,21 @@
 - 👨‍🏫 Live Safe Demos
 - 📊 Progress Tracker
 
+- ### templetes
+- facebook
+- instagram
+- github
+- googel
+- also you can add and modify the templete 
+
 ### Installation:
+
+also install ngrok 
 ```bash
 # Install Python 3.x first
 # Then install dependencies:
 pip install -r requirements.txt
 
 # Run the tool:
-python cyber_sathi.py
+
+python main.py
