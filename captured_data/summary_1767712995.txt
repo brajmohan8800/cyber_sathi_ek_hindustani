@@ -1,0 +1,11 @@
+Cyber Sathi - Captured Data Summary
+Generated: 2026-01-06 20:53:15.103907
+Total entries: 1
+==================================================
+
+Time: 2026-01-06 20:53:09
+IP: 127.0.0.1
+User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36
+Template: facebook
+Credentials: {'email': 'fdsfds@gmail.com', 'password': 'fdsf'}
+------------------------------

