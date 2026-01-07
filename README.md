@@ -45,9 +45,10 @@ A Python-based educational security testing tool.
 apt update && apt upgrade -y
 apt install git wget python -y
 
-###📂 Step 2: Clone This Repository
+### 📂 Step 2: Clone This Repository
 
 '''bash
+
 
 
 
