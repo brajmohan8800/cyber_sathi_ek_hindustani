@@ -69,6 +69,11 @@ ngrok config add-authtoken YOUR_NGROK_AUTH_TOKEN
 # 8. Test Ngrok
 ngrok http 80
 
+
+---
+
+### install project
+
 ```bash
 # Install Python 3.x first
 # Then install dependencies:
@@ -77,4 +82,5 @@ pip install -r requirements.txt
 # Run the tool:
 
 python main.py
+
 
