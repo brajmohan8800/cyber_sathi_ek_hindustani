@@ -19,68 +19,35 @@
 
 ### Installation:
 
-# 🚀 cyber_sathi_ek_hindustani
+## 🚀 cyber_sathi_ek_hindustani
 
 A Python-based educational security testing tool.  
-**Use only on systems you own or have explicit permission to test.**
+⚠️ Use only on systems you own or have explicit permission to test.
 
-> ⚠️ **Important:**  
-> Always turn **Mobile Hotspot / Wi-Fi ON** before running Ngrok.  
-> Ngrok often fails on mobile data due to ISP restrictions.
+> IMPORTANT  
+> Ngrok use karte waqt **Mobile Hotspot / Wi‑Fi ON hona zaroori hai**.  
+> Sirf mobile data par ngrok aksar connect nahi hota.
 
 ---
 
 ### 📦 Requirements
 
-- Android Device  
-- Termux (F-Droid recommended)  
-- Python 3.x  
-- Active Internet connection (Wi-Fi / Hotspot)
+- Android phone
+- Termux (F‑Droid version recommended)
+- Python 3.x
+- Active Internet (Wi‑Fi / Hotspot)
 
 ---
 
-### 🔧 Ngrok Installation on Termux
-
-Follow these steps carefully. Copy each block and run in Termux.
+### 📥 Step 1: Install Required Packages (One Time)
 
 ```bash
-# 1. Update Termux & install wget
 apt update && apt upgrade -y
-apt install wget -y
+apt install git wget python -y
 
-# 2. Download Ngrok (ARM64)
-wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-arm64.tgz
+###📂 Step 2: Clone This Repository
 
-# 3. Extract Ngrok
-tar -xvzf ngrok-v3-stable-linux-arm64.tgz
+'''bash
 
-# 4. Make Ngrok executable
-chmod +x ngrok
-
-# 5. Move Ngrok to system PATH
-mv ngrok $PREFIX/bin/
-
-# 6. Verify Ngrok installation
-ngrok version
-
-# 7. Add your Ngrok auth token (replace YOUR_NGROK_AUTH_TOKEN)
-ngrok config add-authtoken YOUR_NGROK_AUTH_TOKEN
-
-# 8. Test Ngrok
-ngrok http 80
-
-
----
-
-### install project
-
-```bash
-# Install Python 3.x first
-# Then install dependencies:
-pip install -r requirements.txt
-
-# Run the tool:
-
-python main.py
 
 
