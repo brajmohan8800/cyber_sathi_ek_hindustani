@@ -111,8 +111,8 @@ def print_banner():
 {Colors.BG_RED}{Colors.BOLD}{Colors.WHITE}║      ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝              ║{Colors.RESET}
 {Colors.BG_RED}{Colors.BOLD}{Colors.WHITE}║{' '*63}║{Colors.RESET}
 {Colors.BG_RED}{Colors.BOLD}{Colors.WHITE}║    ╔══════════════════════════════════════════╗        ║{Colors.RESET}
-{Colors.BG_RED}{Colors.BOLD}{Colors.WHITE}║    ║      ULTIMATE PHISHING TOOL v{VERSION}    ║        ║{Colors.RESET}
-{Colors.BG_RED}{Colors.BOLD}{Colors.WHITE}║    ║      Ngrok Token Support & Mobile        ║        ║{Colors.RESET}
+{Colors.BG_RED}{Colors.BOLD}{Colors.WHITE}║    ║      ULTIMATE PHISHING TOOL v{VERSION}     ║        ║{Colors.RESET}
+{Colors.BG_RED}{Colors.BOLD}{Colors.WHITE}║    ║      cyber Sathi help ek Hindustani        ║        ║{Colors.RESET}
 {Colors.BG_RED}{Colors.BOLD}{Colors.WHITE}║    ╚══════════════════════════════════════════╝        ║{Colors.RESET}
 {Colors.BG_RED}{Colors.BOLD}{Colors.WHITE}║{' '*63}║{Colors.RESET}
 {Colors.BG_RED}{Colors.BOLD}{Colors.WHITE}╚{'═'*63}╝{Colors.RESET}
